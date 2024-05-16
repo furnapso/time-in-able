@@ -1,21 +1,30 @@
 <script setup lang="ts">
 import {Capacitor} from "@capacitor/core";
-import {kApp, Tabbar, TabbarLink} from "konsta/vue";
+import {faUser} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faHouse} from "@fortawesome/free-solid-svg-icons";
+import useNavbarTitle from "~/composables/navbarTitle";
 
 const theme = computed(() => Capacitor.getPlatform() === "android" ? "material" : "ios");
+
+useHead({
+  titleTemplate(title) {
+    return title ? `${title} | Time in Able` : "Time in Able";
+  }
+});
+
+const {navbarTitle} = useNavbarTitle();
 </script>
 
 <template>
   <k-app :theme="theme">
+    <k-navbar :title="navbarTitle"/>
     <slot/>
-    <Tabbar :icons="true" class="bottom-0 left-0 fixed">
-      <tabbar-link label="Home">
+    <k-tabbar :icons="true" class="bottom-0 left-0 fixed">
+      <k-tabbar-link label="Clients" href="/clients">
         <template #icon>
-          <font-awesome-icon :icon="faHouse"/>
+          <font-awesome-icon :icon="faUser"/>
         </template>
-      </tabbar-link>
-    </Tabbar>
+      </k-tabbar-link>
+    </k-tabbar>
   </k-app>
 </template>
