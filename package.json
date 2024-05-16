@@ -7,7 +7,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "cap:sync": "capacitor sync",
+    "cap:run": "capacitor run android"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
@@ -19,10 +21,12 @@
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "@ionic/storage": "^4.0.0",
     "@nuxtjs/tailwindcss": "^6.12.0",
+    "@pinia/nuxt": "^0.5.1",
     "cordova-sqlite-storage": "^6.1.0",
     "konsta": "^3.1.3",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "nuxt": "^3.11.2",
+    "pinia": "^2.1.7",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
   },
