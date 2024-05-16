@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {navigateTo} from "#app";
 
-navigateTo("/client");
+navigateTo("/clients");
 </script>
 
 <template>
