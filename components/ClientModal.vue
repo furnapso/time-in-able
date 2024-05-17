@@ -7,7 +7,7 @@ import useEditingClient from "~/composables/editingClient";
 const props = defineProps<{
   open: boolean;
 }>();
-const emit = defineEmits(["save", "close"]);
+const emit = defineEmits(["save", "close", "delete"]);
 
 export interface NameValue {
   name?: string | null;
@@ -79,6 +79,15 @@ watch(editingClient, (editingClientVal) => {
     lastName.value.name = editingClient.value?.lastName;
   }
 });
+
+const deleteDialog = ref(false);
+
+function onDelete() {
+  if (editingClient.value) {
+    emit("delete", editingClient.value);
+  }
+  deleteDialog.value = false;
+}
 </script>
 
 <template>
@@ -112,6 +121,29 @@ watch(editingClient, (editingClientVal) => {
           @clear="lastName.name = ''"
         />
       </k-list>
+      <k-button
+        v-if="editingClient"
+        class="bg-red-500"
+        @click="deleteDialog = true"
+        >Delete
+      </k-button>
+      <k-dialog
+        :opened="deleteDialog"
+        @backdropclick="deleteDialog = false"
+        v-if="editingClient"
+      >
+        <template #title> Delete Client</template>
+        Are you sure you want to delete {{ editingClient.firstName }}
+        {{ editingClient.lastName }}?
+        <template #buttons>
+          <k-dialog-button @click="deleteDialog = false"
+            >Cancel
+          </k-dialog-button>
+          <k-dialog-button class="bg-red-500 text-slate-100" @click="onDelete">
+            Delete
+          </k-dialog-button>
+        </template>
+      </k-dialog>
     </k-block>
   </k-sheet>
 </template>

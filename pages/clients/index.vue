@@ -10,7 +10,7 @@ useHead({
 });
 
 const clients = computed(() => useAppStore().clients);
-const { saveClient } = useAppStore();
+const { saveClient, deleteClient } = useAppStore();
 const { setEditingClient } = useEditingClient();
 const { createNotification } = useNotification();
 
@@ -32,6 +32,15 @@ function onClientSave(client: Client) {
   clientModalOpen.value = false;
   saveClient(client);
   createNotification("Client Saved", `${client.firstName} ${client.lastName}`);
+}
+
+function onClientDelete(client: Client) {
+  clientModalOpen.value = false;
+  deleteClient(client);
+  createNotification(
+    "Client Deleted",
+    `${client.firstName} ${client.lastName}`,
+  );
 }
 </script>
 
@@ -57,5 +66,6 @@ function onClientSave(client: Client) {
     :open="clientModalOpen"
     @close="clientModalOpen = false"
     @save="onClientSave"
+    @delete="onClientDelete"
   />
 </template>

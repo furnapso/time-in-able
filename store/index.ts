@@ -24,5 +24,13 @@ export const useAppStore = defineStore("app", () => {
     tasks.value.push(task);
   }
 
-  return { clients, tasks, saveClient, addTask };
+  function deleteClient(client: Client) {
+    const index = clients.value.findIndex((i) => i.id === client.id);
+    if (index > -1) {
+      clients.value.splice(index, 1);
+      clients.value = [...clients.value];
+    }
+  }
+
+  return { clients, tasks, saveClient, addTask, deleteClient };
 });
