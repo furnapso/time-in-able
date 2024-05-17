@@ -83,7 +83,7 @@ watch(editingClient, () => {
 
 const deleteDialogId = useId();
 const deleteDialog = ref(false);
-const deleteDialogRef = ref();
+const sheetBackdrop = computed(() => !deleteDialog.value);
 
 function onDelete() {
   if (editingClient.value) {
@@ -106,7 +106,6 @@ function attachToParent() {
       @backdropclick="deleteDialog = false"
       v-if="editingClient"
       @vue:mounted="attachToParent"
-      :backdrop="false"
     >
       <template #title> Delete Client</template>
       Are you sure you want to delete {{ editingClient.firstName }}
@@ -123,7 +122,7 @@ function attachToParent() {
     :opened="props.open"
     @backdropclick="emit('close')"
     class="w-screen z-10"
-    :backdrop="false"
+    :backdrop="sheetBackdrop"
   >
     <k-toolbar top>
       <k-link toolbar @click="cancel">Cancel</k-link>
