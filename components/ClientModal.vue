@@ -2,11 +2,10 @@
 import { ref } from "vue";
 import useNameValidator from "~/composables/nameValidator";
 import { capitalize } from "lodash";
-import type { Client } from "@/model/model";
+import useEditingClient from "~/composables/editingClient";
 
 const props = defineProps<{
   open: boolean;
-  client: Client | null;
 }>();
 const emit = defineEmits(["save", "close"]);
 
@@ -19,6 +18,8 @@ const defaultNameValue: NameValue = {
   name: null,
   changed: false,
 };
+
+const { editingClient } = useEditingClient();
 
 const firstName = ref({ ...defaultNameValue });
 const lastName = ref({ ...defaultNameValue });
@@ -69,13 +70,21 @@ function cancel() {
   emit("close");
   reset();
 }
+
+watchEffect(() => {
+  reset();
+  if (editingClient.value) {
+    firstName.value.name = editingClient.value?.firstName;
+    lastName.value.name = editingClient.value?.lastName;
+  }
+});
 </script>
 
 <template>
   <k-sheet :opened="props.open" @backdropclick="emit('close')" class="w-screen">
     <k-toolbar top>
       <k-link toolbar @click="cancel">Cancel</k-link>
-      <span>Add new client</span>
+      <span>{{ !!editingClient ? "Edit" : "Add new" }} client</span>
       <k-link toolbar @click="save">Save</k-link>
     </k-toolbar>
     <k-block>
