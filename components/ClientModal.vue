@@ -72,9 +72,9 @@ function cancel() {
   reset();
 }
 
-watch(editingClient, (editingClientVal) => {
+watch(editingClient, () => {
   reset();
-  if (editingClientVal) {
+  if (editingClient.value) {
     firstName.value.name = editingClient.value?.firstName;
     lastName.value.name = editingClient.value?.lastName;
   }
