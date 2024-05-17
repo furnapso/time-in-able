@@ -37,6 +37,7 @@
     "@capacitor/cli": "^6.0.0",
     "@types/lodash": "^4.17.3",
     "@types/uuid": "^9.0.8",
-    "@types/validator": "^13.11.10"
+    "@types/validator": "^13.11.10",
+    "prettier": "3.2.5"
   }
 }

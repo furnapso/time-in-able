@@ -1,10 +1,7 @@
 <script setup lang="ts">
-const {params} = useRoute();
+const { params } = useRoute();
 </script>
 
-<template>
-</template>
+<template></template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

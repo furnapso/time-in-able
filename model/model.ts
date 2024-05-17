@@ -1,12 +1,12 @@
 export interface BaseModel {
-    id?: string;
+  id?: string;
 }
 
 export interface Client extends BaseModel {
-    firstName: string,
-    lastName: string,
+  firstName: string;
+  lastName: string;
 }
 
 export interface Task extends BaseModel {
-    name: string;
+  name: string;
 }
