@@ -22,5 +22,5 @@ useNavbarTitle().setNavbarTitle("Clients");
       You don't have any clients. Click the Add button to add a new client.
     </p>
   </k-block>
-  <add-edit-client-modal :open="clientModalOpen" @close="clientModalOpen = false"/>
+  <client-modal :open="clientModalOpen" @close="clientModalOpen = false"/>
 </template>
