@@ -17,14 +17,16 @@ const {navbarTitle} = useNavbarTitle();
 
 <template>
   <k-app :theme="theme">
-    <k-navbar :title="navbarTitle"/>
-    <slot/>
-    <k-tabbar :icons="true" class="bottom-0 left-0 fixed">
-      <k-tabbar-link label="Clients" href="/clients">
-        <template #icon>
-          <font-awesome-icon :icon="faUser"/>
-        </template>
-      </k-tabbar-link>
-    </k-tabbar>
+    <k-page>
+      <k-navbar :title="navbarTitle"/>
+      <slot/>
+      <k-tabbar :icons="true" class="bottom-0 left-0 fixed">
+        <k-tabbar-link label="Clients" href="/clients" :active="useRoute().path.includes('clients')">
+          <template #icon>
+            <font-awesome-icon :icon="faUser"/>
+          </template>
+        </k-tabbar-link>
+      </k-tabbar>
+    </k-page>
   </k-app>
 </template>
