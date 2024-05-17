@@ -49,7 +49,7 @@ function save() {
   forceValidate.value = true;
   if (valid.value) {
     emit("save", {
-      firstName: firstName.value, lastName: lastName.value
+      firstName: firstName.value.name, lastName: lastName.value.name
     });
     reset();
   }
