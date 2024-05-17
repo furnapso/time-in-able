@@ -1,18 +1,22 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import useNameValidator from "~/composables/nameValidator";
+import {capitalize} from "lodash";
 
 const props = defineProps({
   open: {
-    type: Boolean,
-    required: true
+    type: Boolean, required: true
   }
 });
 const emit = defineEmits(["save", "close"]);
 
-const defaultNameValue = {
-  name: null,
-  changed: false
+export interface NameValue {
+  name: string | null,
+  changed: boolean
+}
+
+const defaultNameValue: NameValue = {
+  name: null, changed: false
 };
 
 const firstName = ref({...defaultNameValue});
@@ -25,27 +29,35 @@ const valid = computed(() => firstNameError.value === null && lastNameError.valu
 
 function firstNameChange(e) {
   firstName.value = {
-    name: e.target.value,
-    changed: true
+    name: capitalize(e.target.value).trim(), changed: true
   };
 }
 
 function lastNameChange(e) {
   lastName.value = {
-    name: e.target.value,
-    changed: true
+    name: capitalize(e.target.value).trim(), changed: true
   };
+}
+
+function reset() {
+  forceValidate.value = false;
+  firstName.value = {...defaultNameValue};
+  lastName.value = {...defaultNameValue};
 }
 
 function save() {
   forceValidate.value = true;
+  if (valid.value) {
+    emit("save", {
+      firstName: firstName.value, lastName: lastName.value
+    });
+    reset();
+  }
 }
 
 function cancel() {
   emit("close");
-  forceValidate.value = false;
-  firstName.value = {...defaultNameValue};
-  lastName.value = {...defaultNameValue};
+  reset();
 }
 </script>
 
@@ -59,9 +71,11 @@ function cancel() {
     <k-block>
       <k-list strong inset>
         <k-list-input label="First Name" placeholder="First Name" :required="true"
-                      @change="firstNameChange" :error="firstNameError" :value="firstName.name"/>
+                      @change="firstNameChange" :error="firstNameError" :value="firstName.name" clear-button
+                      @clear="firstName.name = ''" autocapitalize="words"/>
         <k-list-input label="Last Name" placeholder="Last Name" :required="true"
-                      @change="lastNameChange" :error="lastNameError" :value="lastName.name"/>
+                      @change="lastNameChange" :error="lastNameError" :value="lastName.name" clear-button
+                      @clear="lastName.name = ''"/>
       </k-list>
     </k-block>
   </k-sheet>
