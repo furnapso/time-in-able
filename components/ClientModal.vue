@@ -6,6 +6,7 @@ import useEditingClient from "~/composables/editingClient";
 
 const props = defineProps<{
   open: boolean;
+  parentId: string;
 }>();
 const emit = defineEmits(["save", "close", "delete"]);
 
@@ -80,7 +81,9 @@ watch(editingClient, () => {
   }
 });
 
+const deleteDialogId = useId();
 const deleteDialog = ref(false);
+const deleteDialogRef = ref();
 
 function onDelete() {
   if (editingClient.value) {
@@ -88,10 +91,40 @@ function onDelete() {
   }
   deleteDialog.value = false;
 }
+
+function attachToParent() {
+  const deleteDialogEl = document.querySelector(`#${deleteDialogId}`);
+  const parentEl = document.querySelector(`#${props.parentId}`);
+  if (parentEl && deleteDialogEl) parentEl.appendChild(deleteDialogEl);
+}
 </script>
 
 <template>
-  <k-sheet :opened="props.open" @backdropclick="emit('close')" class="w-screen">
+  <div :id="deleteDialogId">
+    <k-dialog
+      :opened="deleteDialog"
+      @backdropclick="deleteDialog = false"
+      v-if="editingClient"
+      @vue:mounted="attachToParent"
+      :backdrop="false"
+    >
+      <template #title> Delete Client</template>
+      Are you sure you want to delete {{ editingClient.firstName }}
+      {{ editingClient.lastName }}?
+      <template #buttons>
+        <k-dialog-button @click="deleteDialog = false">Cancel</k-dialog-button>
+        <k-dialog-button class="bg-red-500 text-slate-100" @click="onDelete">
+          Delete
+        </k-dialog-button>
+      </template>
+    </k-dialog>
+  </div>
+  <k-sheet
+    :opened="props.open"
+    @backdropclick="emit('close')"
+    class="w-screen z-10"
+    :backdrop="false"
+  >
     <k-toolbar top>
       <k-link toolbar @click="cancel">Cancel</k-link>
       <span>{{ !!editingClient ? "Edit" : "Add new" }} client</span>
@@ -127,23 +160,6 @@ function onDelete() {
         @click="deleteDialog = true"
         >Delete
       </k-button>
-      <k-dialog
-        :opened="deleteDialog"
-        @backdropclick="deleteDialog = false"
-        v-if="editingClient"
-      >
-        <template #title> Delete Client</template>
-        Are you sure you want to delete {{ editingClient.firstName }}
-        {{ editingClient.lastName }}?
-        <template #buttons>
-          <k-dialog-button @click="deleteDialog = false"
-            >Cancel
-          </k-dialog-button>
-          <k-dialog-button class="bg-red-500 text-slate-100" @click="onDelete">
-            Delete
-          </k-dialog-button>
-        </template>
-      </k-dialog>
     </k-block>
   </k-sheet>
 </template>

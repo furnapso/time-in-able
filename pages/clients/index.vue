@@ -4,6 +4,7 @@ import { useAppStore } from "~/store";
 import type { Client } from "~/model/model";
 import useEditingClient from "~/composables/editingClient";
 import useNotification from "~/composables/notification";
+import { useId } from "#app";
 
 useHead({
   title: "Clients",
@@ -13,6 +14,7 @@ const clients = computed(() => useAppStore().clients);
 const { saveClient, deleteClient } = useAppStore();
 const { setEditingClient } = useEditingClient();
 const { createNotification } = useNotification();
+const id = useId();
 
 const clientModalOpen = ref(false);
 
@@ -48,7 +50,7 @@ function onClientDelete(client: Client) {
   <k-toolbar :outline="false" inner-class="!justify-end">
     <k-link toolbar @click="onAddClicked">Add</k-link>
   </k-toolbar>
-  <k-block strong>
+  <k-block strong :id="id">
     <p v-if="clients.length === 0">
       You don't have any clients. Click the Add button to add a new client.
     </p>
@@ -64,6 +66,7 @@ function onClientDelete(client: Client) {
   </k-block>
   <client-modal
     :open="clientModalOpen"
+    :parent-id="id"
     @close="clientModalOpen = false"
     @save="onClientSave"
     @delete="onClientDelete"
