@@ -10,7 +10,7 @@ const props = defineProps<{
 const emit = defineEmits(["save", "close"]);
 
 export interface NameValue {
-  name: string | null;
+  name?: string | null;
   changed: boolean;
 }
 
@@ -61,6 +61,7 @@ function save() {
     emit("save", {
       firstName: firstName.value.name,
       lastName: lastName.value.name,
+      id: editingClient.value?.id,
     });
     reset();
   }
@@ -71,9 +72,9 @@ function cancel() {
   reset();
 }
 
-watchEffect(() => {
+watch(editingClient, (editingClientVal) => {
   reset();
-  if (editingClient.value) {
+  if (editingClientVal) {
     firstName.value.name = editingClient.value?.firstName;
     lastName.value.name = editingClient.value?.lastName;
   }

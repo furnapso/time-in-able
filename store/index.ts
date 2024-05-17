@@ -7,9 +7,16 @@ export const useAppStore = defineStore("app", () => {
   const clients: Ref<Client[]> = ref([]);
   const tasks: Ref<Task[]> = ref([]);
 
-  function addClient(client: Client) {
+  function saveClient(client: Client) {
     addIdIfMissing(client);
-    clients.value.push(client);
+    const index = clients.value.findIndex((i) => i.id === client.id);
+    if (index > -1) {
+      clients.value[index] = client;
+    } else {
+      clients.value.push(client);
+    }
+
+    clients.value = [...clients.value];
   }
 
   function addTask(task: Task) {
@@ -17,5 +24,5 @@ export const useAppStore = defineStore("app", () => {
     tasks.value.push(task);
   }
 
-  return { clients, tasks, addClient, addTask };
+  return { clients, tasks, saveClient, addTask };
 });

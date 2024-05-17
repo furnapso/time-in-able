@@ -2,27 +2,39 @@
 import useNavbarTitle from "~/composables/navbarTitle";
 import { useAppStore } from "~/store";
 import type { Client } from "~/model/model";
+import useEditingClient from "~/composables/editingClient";
 
 useHead({
   title: "Clients",
 });
 
 const clients = computed(() => useAppStore().clients);
-const { addClient } = useAppStore();
+const { saveClient } = useAppStore();
+const { setEditingClient } = useEditingClient();
 
 const clientModalOpen = ref(false);
 
 useNavbarTitle().setNavbarTitle("Clients");
 
-function handleSave(client: Client) {
+function onClientEditClicked(client: Client) {
+  setEditingClient(client);
+  clientModalOpen.value = true;
+}
+
+function onAddClicked() {
+  setEditingClient();
+  clientModalOpen.value = true;
+}
+
+function onClientSave(client: Client) {
   clientModalOpen.value = false;
-  addClient(client);
+  saveClient(client);
 }
 </script>
 
 <template>
   <k-toolbar :outline="false" inner-class="!justify-end">
-    <k-link toolbar @click="clientModalOpen = true">Add</k-link>
+    <k-link toolbar @click="onAddClicked">Add</k-link>
   </k-toolbar>
   <k-block strong>
     <p v-if="clients.length === 0">
@@ -34,12 +46,13 @@ function handleSave(client: Client) {
         :title="`${client.firstName} ${client.lastName}`"
         link
         after="Edit"
+        @click="onClientEditClicked(client)"
       />
     </k-list>
   </k-block>
   <client-modal
     :open="clientModalOpen"
     @close="clientModalOpen = false"
-    @save="handleSave"
+    @save="onClientSave"
   />
 </template>
