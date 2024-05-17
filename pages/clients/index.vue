@@ -3,6 +3,7 @@ import useNavbarTitle from "~/composables/navbarTitle";
 import { useAppStore } from "~/store";
 import type { Client } from "~/model/model";
 import useEditingClient from "~/composables/editingClient";
+import useNotification from "~/composables/notification";
 
 useHead({
   title: "Clients",
@@ -11,6 +12,7 @@ useHead({
 const clients = computed(() => useAppStore().clients);
 const { saveClient } = useAppStore();
 const { setEditingClient } = useEditingClient();
+const { createNotification } = useNotification();
 
 const clientModalOpen = ref(false);
 
@@ -29,6 +31,7 @@ function onAddClicked() {
 function onClientSave(client: Client) {
   clientModalOpen.value = false;
   saveClient(client);
+  createNotification("Client Saved", `${client.firstName} ${client.lastName}`);
 }
 </script>
 

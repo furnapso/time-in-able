@@ -20,6 +20,7 @@ const { navbarTitle } = useNavbarTitle();
 <template>
   <k-app :theme="theme">
     <k-page>
+      <notifications />
       <k-navbar :title="navbarTitle" />
       <slot />
       <k-tabbar :icons="true" class="bottom-0 left-0 fixed">
